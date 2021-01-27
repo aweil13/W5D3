@@ -1,7 +1,7 @@
 PRAGMA foreign_keys = ON;
 
 CREATE TABLE users(
-    id INTEGER PRIMARY KEY,
+    id serial PRIMARY KEY,
     fname TEXT NOT NULL,
     lname TEXT NOT NULL,
 );
@@ -10,6 +10,7 @@ CREATE TABLE questions(
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     body TEXT NOT,
+    associated_author_id INTEGER NOT NULL,
 
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
@@ -33,7 +34,12 @@ CREATE TABLE replies(
     FOREIGN KEY(parent_id) REFERENCES replies(id) ON DELETE CASCADE
  );
 
- 
+ CREATE TABLE question_likes(
+     id serial PRIMARY KEY,
+
+ )
+
+
 
 
 
