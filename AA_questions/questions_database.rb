@@ -2,7 +2,7 @@ require 'sqlite3'
 require 'singleton'
 
 class QuestionsDBConnection < SQLite3::Database 
-    include SINGLETON 
+    include Singleton 
 
     def initialize
         super('questions.db')
@@ -22,6 +22,20 @@ class Users
     # each row of table is represented as an array
     # 19 creates new instances of users.
 
+    def self.find_by_id(id)
+        user = QuestionsDBConnection.instance.execute(<<-SQL, id)
+            SELECT
+                *
+            FROM
+              users
+            WHERE
+              id = ?    
+        SQL
+        return nil unless user
+        Users.new(user.first)
+    end
+
+
     def initialize(options)
         @id = options['id']
         @fname = options['fname']
@@ -38,4 +52,8 @@ class Users
         SQL
         @id = QuestionsDBConnection.instance.last_insert_row_id
     end
+
+
+    
+
 end
