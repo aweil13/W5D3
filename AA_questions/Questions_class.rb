@@ -1,21 +1,11 @@
-require 'sqlite3'
-require 'singleton'
+require_relative 'questions_database.rb'
 
-class QuestionsDBConnection < SQLite3::Database 
-    include Singleton 
 
-    def initialize
-        super('questions.db')
-        self.type_translation = true
-        self.results_as_hash = true
-    end
-end
-
-class Users
+class Questions
     attr_accessor :id, :fname, :lname
 
     def self.all
-        data = QuestionsDBConnection.instance.execute('SELECT *  FROM users')
+        data = QuestionsDBConnection.instance.execute('SELECT *  FROM questions')
         data.map {|datum| Users.new(datum)}
     end
     # line 18 takes the data from our .db file (users table) 
@@ -23,30 +13,30 @@ class Users
     # 19 creates new instances of users.
 
     def self.find_by_id(id)
-        user = QuestionsDBConnection.instance.execute(<<-SQL, id)
+        question = QuestionsDBConnection.instance.execute(<<-SQL, id)
             SELECT
                 *
             FROM
-              users
+              questions
             WHERE
               id = ?    
         SQL
-        return nil unless user
-        Users.new(user.first)
+        return nil unless question
+        Questions.new(question.first)
     end
 
     # initialize takes in a HASH!!! 
     def initialize(options)
         @id = options['id']
-        @fname = options['fname']
-        @lname = options['lname']
+        @title = options['fname']
+        @body = options['lname']
     end
 
     def create
         raise '#{self} already in database' if @id
         QuestionsDBConnection.instance.execute(<<-SQL, @fname, @lname)
             INSERT INTO
-                users (fname, lname)
+                questions (fname, lname)
             VALUES
                 (? , ?)
         SQL
@@ -57,7 +47,7 @@ class Users
         raise '#{self} NOT in database' unless @id
         QuestionsDBConnection.instance.execute(<<-SQL, @fname, @lname, @id)
         UPDATE
-            users
+            questions
         SET
             fname = ?, lname = ?
         WHERE
