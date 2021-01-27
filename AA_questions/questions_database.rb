@@ -53,7 +53,7 @@ class Users
         @id = QuestionsDBConnection.instance.last_insert_row_id
     end
 
-
     
+
 
 end
