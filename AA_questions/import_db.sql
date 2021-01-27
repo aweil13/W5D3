@@ -78,3 +78,9 @@ INSERT INTO
     VALUES
       ((SELECT id FROM users WHERE id = 2), (SELECT id from questions WHERE id = 1), 'Around the corner!', NULL),
       ((SELECT id FROM users WHERE id = 1), (SELECT id from questions WHERE id = 2), 'Ask Donnie!', NULL);
+
+INSERT INTO 
+        question_likes (thumbs_up, user_id, question_id)
+    VALUES
+        (TRUE, (SELECT id FROM users WHERE id = 1), (SELECT id from questions WHERE id = 2)),    
+        (TRUE, (SELECT id FROM users WHERE id = 2), (SELECT id from questions WHERE id = 2));
