@@ -67,5 +67,14 @@ INSERT INTO
     ('Car has no Battery', 'Where is the closest supercharger?', (SELECT id FROM users WHERE fname = 'Elon')),
     ('Divorce lawyers near me', 'Any decent lawyers around DC?', (SELECT id FROM users WHERE lname = 'Bezos'));
 
+INSERT INTO
+        question_follows (user_id, question_id)
+      VALUES
+        ((SELECT id FROM users WHERE id = 1), (SELECT id from questions WHERE associated_author_id = 1)),
+        ((SELECT id FROM users WHERE id = 2), (SELECT id from questions WHERE associated_author_id = 2));
 
-
+INSERT INTO 
+        replies (user_id, question_id, body, parent_id)
+    VALUES
+      ((SELECT id FROM users WHERE id = 2), (SELECT id from questions WHERE id = 1), 'Around the corner!', NULL),
+      ((SELECT id FROM users WHERE id = 1), (SELECT id from questions WHERE id = 2), 'Ask Donnie!', NULL);
